@@ -1,7 +1,10 @@
+import os, sys
+import datetime as D
+
 from nose.tools import assert_equals, nottest
 
-from account import Account, CHECKING, SAVINGS
-from customer import Customer
+from abcbank.account import Account, CHECKING, SAVINGS
+from abcbank.customer import Customer
 
 
 def test_statement():
@@ -17,20 +20,32 @@ def test_statement():
                   "\n\nSavings Account\n  deposit $4000.00\n  withdrawal $200.00\nTotal $3800.00" +
                   "\n\nTotal In All Accounts $3900.00")
 
-
 def test_oneAccount():
     oscar = Customer("Oscar").openAccount(Account(SAVINGS))
     assert_equals(oscar.numAccs(), 1)
-
 
 def test_twoAccounts():
     oscar = Customer("Oscar").openAccount(Account(SAVINGS))
     oscar.openAccount(Account(CHECKING))
     assert_equals(oscar.numAccs(), 2)
 
-
 @nottest
 def test_threeAccounts():
     oscar = Customer("Oscar").openAccount(Account(SAVINGS))
     oscar.openAccount(Account(CHECKING))
     assert_equals(oscar.numAccs(), 3)
+
+def test_Transf_Statement():
+    checkingAccount = Account(CHECKING)
+    savingsAccount = Account(SAVINGS)
+    henry = Customer("Henry").openAccount(checkingAccount).openAccount(savingsAccount)
+    checkingAccount.deposit(100.0)
+    savingsAccount.deposit(4000.0)
+    savingsAccount.withdraw(200.0)
+    savingsAccount.transfer(checkingAccount, 50)
+    print(henry.getStatement())
+
+test_oneAccount()
+test_twoAccounts()
+test_statement()
+test_Transf_Statement()
