@@ -1,5 +1,6 @@
-from account import CHECKING, SAVINGS, MAXI_SAVINGS
+import os, sys
 
+from abcbank.account import CHECKING, SAVINGS, MAXI_SAVINGS
 
 class Customer:
     def __init__(self, name):
@@ -16,6 +17,9 @@ class Customer:
     def totalInterestEarned(self):
         return sum([a.interestEarned() for a in self.accounts])
 
+    def N_totalInterestEarned(self):
+        return sum([a.N_interestEarned() for a in self.accounts])
+
     # This method gets a statement
     def getStatement(self):
         # JIRA-123 Change by Joe Bloggs 29/7/1988 start
@@ -30,12 +34,9 @@ class Customer:
 
     def statementForAccount(self, account):
         accountType = "\n\n\n"
-        if account.accountType == CHECKING:
-            accountType = "\n\nChecking Account\n"
-        if account.accountType == SAVINGS:
-            accountType = "\n\nSavings Account\n"
-        if account.accountType == MAXI_SAVINGS:
-            accountType = "\n\nMaxi Savings Account\n"
+        if account.accountType == CHECKING:     accountType = "\n\nChecking Account\n"
+        if account.accountType == SAVINGS:      accountType = "\n\nSavings Account\n"
+        if account.accountType == MAXI_SAVINGS: accountType = "\n\nMaxi Savings Account\n"
         transactionSummary = [self.withdrawalOrDepositText(t) + " " + _toDollars(abs(t.amount))
                               for t in account.transactions]
         transactionSummary = "  " + "\n  ".join(transactionSummary) + "\n"
@@ -43,12 +44,13 @@ class Customer:
         return accountType + transactionSummary + totalSummary
 
     def withdrawalOrDepositText(self, transaction):
-        if transaction.amount < 0:
-            return "withdrawal"
-        elif transaction.amount > 0:
-            return "deposit"
-        else:
-            return "N/A"
+        if transaction.tType == 1: 
+            retStr = "Transfer "
+            print('#####in here')
+        else: retStr = ""
+        if   transaction.amount < 0: return retStr+"withdrawal"
+        elif transaction.amount > 0: return retStr+"deposit"
+        else: return "N/A"
 
 
 def _toDollars(number):

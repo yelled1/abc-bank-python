@@ -1,6 +1,5 @@
 from datetime import datetime
 
-
 class DateProvider:
     @staticmethod
     def now():

@@ -1,7 +1,7 @@
-from datetime import datetime
-
+import datetime as D
 
 class Transaction:
-    def __init__(self, amount):
+    def __init__(self, amount, tDate=D.date.today(), tType=0):
         self.amount = amount
-        self.transactionDate = datetime.now()
+        self.transactionDate = tDate
+        self.tType = tType
